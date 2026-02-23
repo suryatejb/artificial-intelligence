@@ -1,0 +1,162 @@
+================================================================
+Assignment 2 Discussion Report
+Course: INFSCI 2440 – Spring 2026
+================================================================
+
+----------------------------------------------------------------
+TASK 1a: Filtering Inference on HMM (Filtering.py)
+----------------------------------------------------------------
+
+ALGORITHM
+---------
+Implements the HMM forward (filtering) algorithm to compute:
+    P(X_t | e_{1:t})  for t = 1 ... 100
+
+At each time step t the algorithm performs two sub-steps:
+
+  1. Prediction step (Chapman-Kolmogorov):
+       P(X_t | e_{1:t-1}) = sum_{x_{t-1}} P(X_t | x_{t-1}) * P(x_{t-1} | e_{1:t-1})
+
+  2. Update / observation step (Bayes rule):
+       P(X_t | e_{1:t}) = alpha * P(e_t | X_t) * P(X_t | e_{1:t-1})
+     where alpha is a normalisation constant so probabilities sum to 1.
+
+MODEL PARAMETERS
+----------------
+Transition model P(X_t | X_{t-1}):
+    P(rain  | rain)  = 0.7    P(rain  | sunny) = 0.3
+    P(sunny | rain)  = 0.3    P(sunny | sunny) = 0.7
+
+Sensor model P(E_t | X_t):
+    P(umbrella    | rain)  = 0.9    P(no umbrella | rain)  = 0.1
+    P(umbrella    | sunny) = 0.2    P(no umbrella | sunny) = 0.8
+
+Prior P(X_0) = <0.5 rain, 0.5 sunny>
+
+TIME COMPLEXITY
+---------------
+  - Reading evidence file:   O(T)   — single pass over T=100 lines
+  - Main filtering loop:     O(T * S^2)  where S=2 (states: rain/sunny)
+                             = O(T * 4) = O(T)
+  - Total:                   O(T)  =  O(100)  ≈ constant in practice
+
+SPACE COMPLEXITY
+----------------
+  O(T) to store the result list; O(T) for the evidence list.
+  The belief state itself is O(S) = O(1) updated in-place each step.
+
+OBSERVATIONS FROM OUTPUT
+------------------------
+- Day 1: no umbrella observed → P(rain|e_1) ≈ 0.111 (mostly sunny)
+- Day 2: umbrella observed    → P(rain|e_{1:2}) ≈ 0.703 (mostly rainy)
+- The distribution reacts quickly to each new observation, as
+  expected from the high sensor reliability (0.9 / 0.8).
+
+
+----------------------------------------------------------------
+TASK 1b: Prediction Inference on HMM (Prediction.py)
+----------------------------------------------------------------
+
+ALGORITHM
+---------
+Prediction computes:
+    P(X_t | e_{1:100})  for t = 101 ... 150
+
+Step 1 — Filter:  Run the forward algorithm exactly as in Task 1a
+          to obtain P(X_100 | e_{1:100}).
+
+Step 2 — Predict: Repeatedly apply only the transition model
+          (no new evidence), k steps into the future:
+    P(X_{100+k} | e_{1:100}) = T^k * P(X_100 | e_{1:100})
+
+This is equivalent to matrix-vector multiplication with the
+transition matrix repeated k times.
+
+TIME COMPLEXITY
+---------------
+  - Filtering phase:   O(100 * S^2) = O(100)
+  - Prediction loop:   O(50 * S^2)  = O(50)    (days 101–150)
+  - Total:             O(T + H)  where T=100 observed, H=50 predicted
+
+SPACE COMPLEXITY
+----------------
+  O(T) for evidence, O(H) for results, O(S)=O(1) for belief state.
+
+OBSERVATIONS FROM OUTPUT
+------------------------
+- Day 101: P(rain) ≈ 0.586 — slightly elevated from the filtered
+  distribution at day 100 (≈ 0.715).
+- Days 101 onward: P(rain) converges monotonically toward 0.5,
+  the stationary distribution of this symmetric Markov chain.
+- By day ~115 the distribution is indistinguishable from 0.5,
+  which is the theoretical stationary distribution:
+      pi(rain) = 0.3 / (0.3 + 0.3) = 0.5
+  This makes sense: without new evidence, uncertainty grows and
+  the belief reverts to the long-run equilibrium.
+
+
+----------------------------------------------------------------
+TASK 2: Bayesian Network – Extract CPTs from Data (BayesianNetwork.py)
+----------------------------------------------------------------
+
+NETWORK STRUCTURE
+-----------------
+Joint probability factorisation:
+    P(a,b,c,d,e) = P(a|b,e) * P(b|c,d) * P(c) * P(d) * P(e)
+
+Variable cardinalities:
+    a: 2 values    b: 3 values    c: 3 values
+    d: 2 values    e: 2 values
+
+ALGORITHM
+---------
+Maximum Likelihood Estimation (MLE) — frequency counting:
+
+  get_p_b_cd():
+    For each sample, increment count[b][c][d].
+    Normalise over b for each (c,d) combination:
+        P(b | c, d) = count(b,c,d) / sum_{b'} count(b',c,d)
+
+  get_p_a_be():
+    For each sample, increment count[a][b][e].
+    Normalise over a for each (b,e) combination:
+        P(a | b, e) = count(a,b,e) / sum_{a'} count(a',b,e)
+
+TIME COMPLEXITY
+---------------
+  - Single pass over N=684 data rows:  O(N)
+  - Normalisation loops (constant size tables):
+      P(b|c,d): O(3*2*3) = O(18)
+      P(a|b,e): O(3*2*2) = O(12)
+  - Total: O(N)  =  O(684)
+
+SPACE COMPLEXITY
+----------------
+  O(b*c*d) = O(18) for count_bcd and p_b_cd
+  O(a*b*e) = O(12) for count_abe and p_a_be
+  Both are O(1) (constant, independent of N).
+
+OBSERVATIONS FROM OUTPUT
+------------------------
+- P(b=1|c=1,d=1) ≈ 0.951: when c=1,d=1, b is almost always 1.
+- P(b=3|c=2,d=2) ≈ 0.536: c=2,d=2 strongly predicts b=3.
+- P(a=2|b=3,e=1) = 1.0: when b=3 and e=1, a is always 2 in the data.
+- These strong conditional dependencies are consistent with a
+  well-structured causal network.
+
+
+----------------------------------------------------------------
+OVERALL EFFICIENCY SUMMARY
+----------------------------------------------------------------
+
+Script            | Dataset size | Time complexity | Wall time
+------------------|--------------|-----------------|----------
+Filtering.py      | 100 days     | O(T)            | < 0.1 s
+Prediction.py     | 100+50 days  | O(T + H)        | < 0.1 s
+BayesianNetwork.py| 684 samples  | O(N)            | < 0.1 s
+
+All three scripts complete in well under the 2-minute requirement.
+No external Python packages are used; only built-in functions
+(open, int, sum, range, len) are employed.
+
+================================================================
