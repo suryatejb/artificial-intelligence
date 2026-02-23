@@ -6,6 +6,7 @@ Course: INFSCI 2440 – Spring 2026
 ----------------------------------------------------------------
 TASK 1a: Filtering Inference on HMM (Filtering.py)
 ----------------------------------------------------------------
+# Reference: Section 15.2, AMIA (Artificial Intelligence: A Modern Approach)
 
 ALGORITHM
 ---------
@@ -56,6 +57,7 @@ OBSERVATIONS FROM OUTPUT
 ----------------------------------------------------------------
 TASK 1b: Prediction Inference on HMM (Prediction.py)
 ----------------------------------------------------------------
+# Reference: Section 15.2, AMIA (Artificial Intelligence: A Modern Approach)
 
 ALGORITHM
 ---------
@@ -156,7 +158,5 @@ Prediction.py     | 100+50 days  | O(T + H)        | < 0.1 s
 BayesianNetwork.py| 684 samples  | O(N)            | < 0.1 s
 
 All three scripts complete in well under the 2-minute requirement.
-No external Python packages are used; only built-in functions
-(open, int, sum, range, len) are employed.
 
 ================================================================

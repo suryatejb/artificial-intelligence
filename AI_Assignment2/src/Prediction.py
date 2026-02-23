@@ -18,7 +18,7 @@ def prediction(evidence_data_add, prior, start_day, end_day):
     S = [[0.9, 0.1],
          [0.2, 0.8]]
 
-    # ---------- Step 1: filter through all 100 observed days ----------
+    # Filter through all 100 observed days
     # Read evidence (days 1-100)
     evidence = []
     with open(evidence_data_add, 'r') as file:
@@ -41,7 +41,7 @@ def prediction(evidence_data_add, prior, start_day, end_day):
         f = [updated_rain / total, updated_sunny / total]
     # f is now P(X_100 | e_{1:100})
 
-    # ---------- Step 2: predict future days without evidence ----------
+    # Predict future days without evidence
     x_prob_rain = []
     # x_prob_sunny[i] = 1 - x_prob_rain[i]
 

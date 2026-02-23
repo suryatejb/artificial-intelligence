@@ -6,9 +6,9 @@ def get_p_b_cd():
     # Compute the conditional probability table P(b | c, d) by counting
     # occurrences in the dataset.
     # b: 3 values (1,2,3)  c: 3 values (1,2,3)  d: 2 values (1,2)
-    # Array layout: count_bcd[b_idx][c_idx][d_idx]  (all 0-based indices)
+    # Array layout: count_bcd[b_idx][c_idx][d_idx]  (0-based indices)
 
-    # Initialise count and probability tables as nested lists (no external libs)
+    # Initialise count and probability tables as nested lists
     count_bcd = [[[0] * 2 for _ in range(3)] for _ in range(3)]
 
     with open(data_add, 'r') as f:
@@ -35,7 +35,7 @@ def get_p_a_be():
     # Compute the conditional probability table P(a | b, e) by counting
     # occurrences in the dataset.
     # a: 2 values (1,2)  b: 3 values (1,2,3)  e: 2 values (1,2)
-    # Array layout: count_abe[a_idx][b_idx][e_idx]  (all 0-based indices)
+    # Array layout: count_abe[a_idx][b_idx][e_idx]  (0-based indices)
 
     count_abe = [[[0] * 2 for _ in range(3)] for _ in range(2)]
 
