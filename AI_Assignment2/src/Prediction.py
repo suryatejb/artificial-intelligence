@@ -64,6 +64,9 @@ end_day = 150
 # the prior distribution on the initial state, P(X0). 50% rainy, and 50% sunny on day 0.
 prior = [0.5, 0.5]
 
+print()
+print("=== Task 1b: Prediction (Days 101-150) ===")
+print()
 x_prob_rain=prediction(evidence_data_add, prior, start_day, end_day)
 for i in range(start_day, end_day+1):
     print("Day " + str(i) + ": rain " + str(x_prob_rain[i-start_day]) + ", sunny " + str(1 - x_prob_rain[i-start_day]))

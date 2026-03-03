@@ -62,6 +62,9 @@ def get_p_a_be():
 # following lines are main function:
 data_add = "data//assign2_BNdata.txt"
 
+print()
+print("=== Task 2: Bayesian Network ===")
+print()
 # probability distribution of b.
 p_b_cd=get_p_b_cd()
 for c in range(3):

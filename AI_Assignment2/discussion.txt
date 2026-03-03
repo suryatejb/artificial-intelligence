@@ -1,12 +1,9 @@
-================================================================
 Assignment 2 Discussion Report
-Course: INFSCI 2440 – Spring 2026
-================================================================
+INFSCI 2440 – Spring 2026
 
 ----------------------------------------------------------------
 TASK 1a: Filtering Inference on HMM (Filtering.py)
 ----------------------------------------------------------------
-# Reference: Section 15.2, AMIA (Artificial Intelligence: A Modern Approach)
 
 ALGORITHM
 ---------
@@ -15,7 +12,7 @@ Implements the HMM forward (filtering) algorithm to compute:
 
 At each time step t the algorithm performs two sub-steps:
 
-  1. Prediction step (Chapman-Kolmogorov):
+  1. Prediction step (use the transition model to predict the next day's weather):
        P(X_t | e_{1:t-1}) = sum_{x_{t-1}} P(X_t | x_{t-1}) * P(x_{t-1} | e_{1:t-1})
 
   2. Update / observation step (Bayes rule):
@@ -57,7 +54,6 @@ OBSERVATIONS FROM OUTPUT
 ----------------------------------------------------------------
 TASK 1b: Prediction Inference on HMM (Prediction.py)
 ----------------------------------------------------------------
-# Reference: Section 15.2, AMIA (Artificial Intelligence: A Modern Approach)
 
 ALGORITHM
 ---------
@@ -93,8 +89,8 @@ OBSERVATIONS FROM OUTPUT
 - By day ~115 the distribution is indistinguishable from 0.5,
   which is the theoretical stationary distribution:
       pi(rain) = 0.3 / (0.3 + 0.3) = 0.5
-  This makes sense: without new evidence, uncertainty grows and
-  the belief reverts to the long-run equilibrium.
+  without new evidence, the probabilities just drift back toward 0.5 
+  over time which makes sense.
 
 
 ----------------------------------------------------------------
@@ -143,8 +139,8 @@ OBSERVATIONS FROM OUTPUT
 - P(b=1|c=1,d=1) ≈ 0.951: when c=1,d=1, b is almost always 1.
 - P(b=3|c=2,d=2) ≈ 0.536: c=2,d=2 strongly predicts b=3.
 - P(a=2|b=3,e=1) = 1.0: when b=3 and e=1, a is always 2 in the data.
-- These strong conditional dependencies are consistent with a
-  well-structured causal network.
+- some combinations in the data are very one-sided which makes 
+  sense given the network structure.
 
 
 ----------------------------------------------------------------
