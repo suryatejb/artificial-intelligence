@@ -1,0 +1,411 @@
+================================================================================
+              Assignment 3 – Supervised Machine Learning  Report
+              INFSCI 2440, Spring 2026
+================================================================================
+
+==============================================================
+  PROGRAM OUTPUT  (exact output of Assignment3Main.py)
+==============================================================
+
+================Task 1================
+Model 1: Gradient Boosting Regressor
+Parameters tried : {'n_estimators': [100, 200, 300], 'learning_rate': [0.05, 0.1, 0.2], 'max_depth': [3, 4, 5]}
+Best parameters  : {'learning_rate': 0.05, 'max_depth': 4, 'n_estimators': 100}
+Best CV MSE      : 5.9468
+Training time    : 7.98 s
+**************************************************
+Mean squared error	24.1197
+--------------------
+Model 2: Random Forest Regressor
+Parameters tried : {'n_estimators': [100, 200, 300], 'max_depth': [None, 5, 10, 15], 'min_samples_split': [2, 5]}
+Best parameters  : {'max_depth': None, 'min_samples_split': 2, 'n_estimators': 300}
+Best CV MSE      : 5.7729
+Training time    : 9.63 s
+**************************************************
+Mean squared error	22.5984
+================Task 2================
+Model 1: Random Forest Classifier
+Parameters tried  : {'n_estimators': [100, 200, 300], 'max_depth': [None, 5, 10], 'min_samples_split': [2, 5]}
+Best parameters   : {'max_depth': 5, 'min_samples_split': 2, 'n_estimators': 100}
+Best CV macro-F1  : 0.3943
+Training time     : 4.27 s
+**************************************************
+Accuracy	0.4062	Macro_F1	0.3154	Macro_Precision	0.3538	Macro_Recall	0.3271
+**************************************************
+Category	at_home	F1	0.5882	Precision	0.4688	Recall	0.7895
+**************************************************
+Category	health	F1	0.0	Precision	0.0	Recall	0.0
+**************************************************
+Category	other	F1	0.2069	Precision	0.3	Recall	0.1579
+**************************************************
+Category	services	F1	0.2105	Precision	0.4	Recall	0.1429
+**************************************************
+Category	teacher	F1	0.5714	Precision	0.6	Recall	0.5455
+--------------------
+Model 2: Support Vector Classifier (SVC)
+Parameters tried  : {'C': [0.1, 1, 10, 100], 'kernel': ['rbf', 'linear'], 'gamma': ['scale', 'auto']}
+Best parameters   : {'C': 0.1, 'gamma': 'scale', 'kernel': 'linear'}
+Best CV macro-F1  : 0.4125
+Training time     : 17.25 s
+**************************************************
+Accuracy	0.3125	Macro_F1	0.2049	Macro_Precision	0.2667	Macro_Recall	0.2258
+**************************************************
+Category	at_home	F1	0.5455	Precision	0.4167	Recall	0.7895
+**************************************************
+Category	health	F1	0.0	Precision	0.0	Recall	0.0
+**************************************************
+Category	other	F1	0.1935	Precision	0.25	Recall	0.1579
+**************************************************
+Category	services	F1	0.0	Precision	0.0	Recall	0.0
+**************************************************
+Category	teacher	F1	0.2857	Precision	0.6667	Recall	0.1818
+================Task 3================
+Model 1: OneVsRest Logistic Regression
+Parameters tried    : {'estimator__C': [0.01, 0.1, 1, 10, 100], 'estimator__max_iter': [2000]}
+Best parameters     : {'estimator__C': 0.01, 'estimator__max_iter': 2000}
+Best CV Hamming loss: 0.1794
+Training time       : 0.31 s
+**************************************************
+Accuracy	0.3594	Hamming loss	0.2188
+--------------------
+Model 2: OneVsRest Gradient Boosting Classifier
+Parameters tried    : {'estimator__n_estimators': [100, 200, 300], 'estimator__learning_rate': [0.05, 0.1, 0.2], 'estimator__max_depth': [3, 4, 5]}
+Best parameters     : {'estimator__learning_rate': 0.05, 'estimator__max_depth': 5, 'estimator__n_estimators': 100}
+Best CV Hamming loss: 0.1822
+Training time       : 45.45 s
+**************************************************
+Accuracy	0.3594	Hamming loss	0.2188
+
+==============================================================
+  FEATURE ENGINEERING
+==============================================================
+
+The dataset has 28 attributes (columns 1–27 are features; target varies by task).
+Feature types and encoding choices are described below.
+
+----- Binary categorical features (mapped to 0 / 1) -----
+Attribute       Values         Encoding
+school          GP / MS        GP=0, MS=1
+sex             F  / M         F=0,  M=1
+address         U  / R         U=0,  R=1
+famsize         LE3/ GT3       LE3=0,GT3=1
+Pstatus         T  / A         T=0,  A=1
+nursery         no / yes       no=0, yes=1
+higher          no / yes       no=0, yes=1
+internet        no / yes       no=0, yes=1
+romantic        no / yes       no=0, yes=1
+
+Reason for choice: These columns have exactly two meaningful values.
+A simple integer mapping (0/1) is compact, perfectly preserves information,
+and avoids unnecessary dimension inflation from one-hot encoding.
+
+----- Multi-valued nominal features (one-hot encoded) -----
+Mjob   : teacher, health, services, at_home, other  (5 dummies – used as feature in Tasks 1 & 3)
+Fjob   : teacher, health, services, at_home, other  (5 dummies)
+reason : course, home, reputation, other            (4 dummies)
+guardian: mother, father, other                     (3 dummies)
+
+Reason for choice: These columns have more than two categories with no natural
+ordinal relationship, so one-hot encoding is the correct representation.
+It avoids implying a spurious integer ordering (e.g. "teacher"=1 < "other"=5).
+
+----- edusupport – special multi-label binary encoding -----
+Column 16 (edusupport) stores the *types* of extra support a student receives.
+Crucially, a student can have MULTIPLE simultaneous support types (e.g.
+"school family" or "family paid"), making this genuinely multi-label data.
+
+  For Tasks 1 and 2 (where edusupport is an INPUT feature):
+    The column is expanded into 3 independent binary features:
+      edu_school  – 1 if 'school' appears in the edusupport value, else 0
+      edu_family  – 1 if 'family' appears, else 0
+      edu_paid    – 1 if 'paid'   appears, else 0
+    A student with "school family" gets edu_school=1, edu_family=1, edu_paid=0.
+    This correctly captures overlapping labels better than a single integer code.
+
+  For Task 3 (where edusupport is the TARGET):
+    The same three-column binary matrix is used as the label matrix Y,
+    enabling genuine multi-label classification.
+
+----- Numerical features (standardised with StandardScaler) -----
+age, Medu, Fedu, traveltime, studytime, failures,
+famrel, freetime, goout, Dalc, Walc, health, absences, G3
+
+Reason for choice: Numerical attributes are retained at their original scale
+because tree-based models (Random Forest, Gradient Boosting) are invariant to
+monotone transformations.  However, StandardScaler is applied before all models
+so that the SVM (Task 2) and Logistic Regression (Task 3) converge efficiently
+and are not dominated by high-range features such as absences (0–93).
+
+Note: Attribute G3 (final grade) is included as a feature in Tasks 2 and 3 since
+predicting Mjob and edusupport respectively does not cause data leakage—G3 is
+an observed attribute for every sample in train and test.
+
+==============================================================
+  TASK 1 – REGRESSION (Predict G3)
+==============================================================
+
+Target: G3 (final numeric grade, range 0–20).
+Evaluation metric: Mean Squared Error (MSE) — lower is better.
+Tuning method: 10-fold cross-validation via GridSearchCV.
+
+--------------------------------------------------------------
+Model 1: Gradient Boosting Regressor (sklearn GradientBoostingRegressor)
+--------------------------------------------------------------
+Why chosen:
+  Gradient Boosting is an ensemble of weak trees built sequentially, each
+  correcting residuals from the previous, making it one of the strongest
+  out-of-the-box regressors on tabular data. It handles mixed feature types
+  and non-linear interactions naturally, which suits this dataset.
+
+Hyperparameters tried (10-fold CV grid search):
+  n_estimators  : [100, 200, 300]          — number of boosting rounds
+  learning_rate : [0.05, 0.1, 0.2]         — shrinkage of each tree's contribution
+  max_depth     : [3, 4, 5]                — max depth per individual tree
+  Total combinations: 27 × 10 folds = 270 fits
+
+CV results (best combination by neg-MSE):
+  Best parameters   : learning_rate=0.05, max_depth=4, n_estimators=100
+  Best 10-fold CV MSE: 5.9468
+  Lower learning_rate with fewer trees reduced overfitting during CV.
+
+Performance on testing data:
+  Mean Squared Error (test) : 24.1197
+  Training time             : 7.98 s
+
+--------------------------------------------------------------
+Model 2: Random Forest Regressor (sklearn RandomForestRegressor)
+--------------------------------------------------------------
+Why chosen:
+  Random Forest averages many independently grown decision trees (bagging),
+  providing variance reduction without the sequential dependency of boosting.
+  It is computationally efficient (parallelisable), robust to outliers, and
+  often competitive with boosting on smaller datasets.
+
+Hyperparameters tried (10-fold CV grid search):
+  n_estimators      : [100, 200, 300]       — number of trees in the forest
+  max_depth         : [None, 5, 10, 15]     — None means fully grown trees
+  min_samples_split : [2, 5]                — min samples needed to split a node
+  Total combinations: 24 × 10 folds = 240 fits
+
+CV results (best combination by neg-MSE):
+  Best parameters    : max_depth=None, min_samples_split=2, n_estimators=300
+  Best 10-fold CV MSE: 5.7729
+  Fully grown trees with many estimators performed best on CV.
+
+Performance on testing data:
+  Mean Squared Error (test) : 22.5984
+  Training time             : 9.63 s
+
+Comparison:
+  Random Forest (Model 2) outperforms Gradient Boosting (Model 1) on the test set
+  (MSE 22.60 vs 24.12). Both models show a gap between CV-MSE and test-MSE, which
+  is expected given that: (a) the test set has only 64 samples (high variance in
+  the estimate), and (b) the train/test sets may have slightly different grade
+  distributions (GP vs MS schools).
+
+==============================================================
+  TASK 2 – MULTI-CATEGORY CLASSIFICATION (Predict Mjob)
+==============================================================
+
+Target: Mjob (mother's job) — 5 categories: teacher, health, services,
+        at_home, other.
+Evaluation: Accuracy; Precision, Recall, F1 per category; Macro-average metrics.
+Tuning method: 10-fold cross-validation via GridSearchCV (scoring: macro-F1).
+
+--------------------------------------------------------------
+Model 1: Random Forest Classifier (sklearn RandomForestClassifier)
+--------------------------------------------------------------
+Why chosen:
+  Random Forest handles multi-class classification natively. Using
+  class_weight='balanced' compensates for the class imbalance observed
+  in the training data (most samples fall in 'other' and 'at_home').
+
+Hyperparameters tried (10-fold CV with macro-F1 scoring):
+  n_estimators      : [100, 200, 300]
+  max_depth         : [None, 5, 10]
+  min_samples_split : [2, 5]
+  Total combinations: 18 × 10 folds = 180 fits
+
+CV results:
+  Best parameters    : max_depth=5, min_samples_split=2, n_estimators=100
+  Best 10-fold CV macro-F1: 0.3943
+  Limiting max_depth to 5 prevents overfitting on minority classes.
+
+Performance on testing data:
+  Accuracy        : 0.4062
+  Macro_F1        : 0.3154
+  Macro_Precision : 0.3538
+  Macro_Recall    : 0.3271
+  Per-category:
+    at_home  — F1=0.5882, Precision=0.4688, Recall=0.7895
+    health   — F1=0.0,    Precision=0.0,    Recall=0.0
+    other    — F1=0.2069, Precision=0.3,    Recall=0.1579
+    services — F1=0.2105, Precision=0.4,    Recall=0.1429
+    teacher  — F1=0.5714, Precision=0.6,    Recall=0.5455
+  Training time: 4.27 s
+
+--------------------------------------------------------------
+Model 2: Support Vector Classifier (sklearn SVC)
+--------------------------------------------------------------
+Why chosen:
+  SVC with a linear kernel finds a maximum-margin hyperplane in the
+  one-hot / scaled feature space, which often generalises well when the
+  number of features is large relative to the sample size. Balanced class
+  weights mitigate the imbalance.
+
+Hyperparameters tried (10-fold CV with macro-F1 scoring):
+  C      : [0.1, 1, 10, 100]    — regularisation strength (inverse)
+  kernel : ['rbf', 'linear']
+  gamma  : ['scale', 'auto']     — kernel coefficient for RBF
+  Total combinations: 16 × 10 folds = 160 fits
+
+CV results:
+  Best parameters    : C=0.1, gamma=scale, kernel=linear
+  Best 10-fold CV macro-F1: 0.4125
+  Linear kernel with strong regularisation avoids overfitting on rare classes.
+
+Performance on testing data:
+  Accuracy        : 0.3125
+  Macro_F1        : 0.2049
+  Macro_Precision : 0.2667
+  Macro_Recall    : 0.2258
+  Per-category:
+    at_home  — F1=0.5455, Precision=0.4167, Recall=0.7895
+    health   — F1=0.0,    Precision=0.0,    Recall=0.0
+    other    — F1=0.1935, Precision=0.25,   Recall=0.1579
+    services — F1=0.0,    Precision=0.0,    Recall=0.0
+    teacher  — F1=0.2857, Precision=0.6667, Recall=0.1818
+  Training time: 17.25 s
+
+Comparison:
+  Random Forest (Model 1) outperforms SVC (Model 2) on the test set across all
+  macro metrics and accuracy (RF: acc=0.41, F1=0.32 vs SVC: acc=0.31, F1=0.20).
+  Both models struggle with the 'health' category (zero test instances correctly
+  identified), which is the rarest class.  The SVC with a linear kernel achieves
+  a higher CV score but lower test accuracy, suggesting mild overfitting to the
+  training folds or a distribution mismatch. The overall difficulty of Task 2
+  reflects the limited signal that other student attributes (grades, demographics,
+  social habits) provide for inferring a parent's occupation.
+
+==============================================================
+  TASK 3 – MULTI-LABEL CLASSIFICATION / TAGGING (Predict edusupport)
+==============================================================
+
+Target: edusupport — a MULTI-LABEL attribute.
+  Each student may receive support from any SUBSET of {school, family, paid}.
+  Examples from the data:
+    "no"           → labels [0, 0, 0]  (no extra support)
+    "school"       → labels [1, 0, 0]
+    "family"       → labels [0, 1, 0]
+    "paid"         → labels [0, 0, 1]
+    "school family"→ labels [1, 1, 0]  (BOTH school and family – genuinely multi-label)
+    "family paid"  → labels [0, 1, 1]
+
+The multi-label structure is observed directly in the training and test data;
+treating this as a standard multi-class problem would be WRONG because it
+ignores the co-occurrence of support types.
+
+Strategy: One-vs-the-Rest (OvR).
+  Three independent binary classifiers are trained, one per label:
+    Classifier 1 – school_support?  (yes/no)
+    Classifier 2 – family_support?  (yes/no)
+    Classifier 3 – paid_support?    (yes/no)
+  Predictions from all three classifiers are combined to form the full
+  binary label vector for each student.
+
+Evaluation metrics:
+  Accuracy (subset/exact-match): fraction of samples where ALL predicted
+    labels exactly match the true label set.
+  Hamming Loss: fraction of label-instance pairs that are incorrectly
+    classified (i.e. label is 1 but predicted 0, or vice versa).
+    Lower Hamming loss is better; it is more lenient than subset accuracy
+    because partial matches count.
+
+Tuning method: 10-fold cross-validation via GridSearchCV (scoring: negative
+  Hamming loss — minimising Hamming loss equals maximising its negative).
+
+--------------------------------------------------------------
+Model 1: OneVsRest Logistic Regression
+--------------------------------------------------------------
+Why chosen:
+  Logistic Regression is a well-regularised linear model. Used inside an
+  OvR wrapper it trains three calibrated probability classifiers, one per
+  label. It is fast and serves as an interpretable baseline. The key
+  hyperparameter C controls L2 regularisation: small C = strong regularisation.
+
+Hyperparameters tried (10-fold CV with neg-Hamming scoring):
+  estimator__C        : [0.01, 0.1, 1, 10, 100]    — regularisation
+  estimator__max_iter : [2000]                       — ensure convergence
+  Total combinations: 5 × 10 folds = 50 fits
+
+CV results:
+  Best parameters     : C=0.01, max_iter=2000
+  Best 10-fold CV Hamming loss: 0.1794
+  Strong regularisation (C=0.01) prevents overfitting to noisy labels.
+
+Performance on testing data:
+  Accuracy      : 0.3594   (subset / exact-match)
+  Hamming loss  : 0.2188
+  Training time : 0.31 s
+
+--------------------------------------------------------------
+Model 2: OneVsRest Gradient Boosting Classifier
+--------------------------------------------------------------
+Why chosen:
+  Gradient Boosting builds a strong non-linear classifier that can capture
+  complex feature interactions (e.g. the combination of school, family income
+  indicators, and parental education levels predicting support type). Inside
+  OvR, it trains three independent GBCs. Expected to have higher capacity
+  than Logistic Regression, potentially capturing non-linearity in the data.
+
+Hyperparameters tried (10-fold CV with neg-Hamming scoring):
+  estimator__n_estimators  : [100, 200, 300]
+  estimator__learning_rate : [0.05, 0.1, 0.2]
+  estimator__max_depth     : [3, 4, 5]
+  Total combinations: 27 × 10 folds = 270 fits (× 3 OvR classifiers)
+
+CV results:
+  Best parameters     : learning_rate=0.05, max_depth=5, n_estimators=100
+  Best 10-fold CV Hamming loss: 0.1822
+  Training time: 45.45 s
+
+Performance on testing data:
+  Accuracy      : 0.3594   (subset / exact-match)
+  Hamming loss  : 0.2188
+
+Comparison:
+  Both models achieve the same test Accuracy (0.3594) and Hamming loss (0.2188),
+  meaning they predict the same distribution of support labels.  Logistic
+  Regression obtains a slightly lower CV Hamming loss (0.1794 vs 0.1822),
+  suggesting that the linear model generalises better for this label structure.
+  The relatively low subset accuracy reflects the inherent difficulty: the
+  "family" label dominates the dataset (majority class per-label), so any model
+  that correctly identifies the dominant label achieves moderate Hamming loss
+  but still struggles with exact full-vector matches.
+
+  Key insight: The multi-label formulation (OvR) is critical here. A naive
+  multi-class approach would be unable to output combinations such as
+  "school family" or "family paid" and would incur higher error. OvR gives
+  each label independent probability, allowing realistic prediction of any
+  subset of support types.
+
+==============================================================
+  SUMMARY TABLE
+==============================================================
+
+Task 1 – Regression (MSE, lower is better):
+  Model                          CV MSE   Test MSE  Train Time
+  Gradient Boosting Regressor    5.9468   24.1197   7.98 s
+  Random Forest Regressor        5.7729   22.5984   9.63 s   ← better
+
+Task 2 – Multi-class Classification (higher is better):
+  Model                          CV F1m  Acc     Macro_F1  Train Time
+  Random Forest Classifier       0.3943  0.4062  0.3154    4.27 s   ← better
+  Support Vector Classifier      0.4125  0.3125  0.2049    17.25 s
+
+Task 3 – Multi-label Classification / Tagging:
+  Model                          CV HL   Acc     Ham. Loss  Train Time
+  OneVsRest Logistic Regression  0.1794  0.3594  0.2188     0.31 s   ← lower CV HL
+  OneVsRest Gradient Boosting    0.1822  0.3594  0.2188     45.45 s
+
+================================================================================
