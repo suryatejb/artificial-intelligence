@@ -1,20 +1,7 @@
 # This is for INFSCI 2440 in Spring 2026.
-# Task 3: Multi-label classification task (tagging)
-#
-# Predict edusupport, which can be ANY COMBINATION of {school, family, paid}
-# or "no" (none).  Each token is treated as an independent binary label so
-# label vectors like [1, 1, 0] ("school family") are valid.
-#
-#   Model 1 - One-vs-Rest  Logistic Regression
-#   Model 2 - One-vs-Rest  Gradient Boosting Classifier
-#
-# Hyperparameter tuning: 10-fold cross-validation (GridSearchCV).
-# Evaluation: subset Accuracy and Hamming Loss.
-#
-# Feature engineering (edusupport excluded as a feature):
-#   - Binary categoricals (school, sex, …) → 0/1
-#   - Nominal columns (Mjob, Fjob, reason, guardian) → one-hot encoding
-#   - All features standardised with StandardScaler
+# Task 3: Multi-label classification (tagging) - predict edusupport
+# A student can have school, family, and/or paid support at the same time,
+# so this is multi-label. I used OneVsRest to train one classifier per label.
 
 import time
 import sys
@@ -40,13 +27,10 @@ class Task3:
         self.X_train, self.y_train, self.X_test, self.y_test = \
             prepare_task3(train_df, test_df)
 
-    # ------------------------------------------------------------------ #
-    # Model 1 – One-vs-Rest  Logistic Regression
-    # ------------------------------------------------------------------ #
     def model_1_run(self):
         print("Model 1: OneVsRest Logistic Regression")
 
-        # Parameters explored during 10-fold CV tuning
+        # tried different regularization strengths
         param_grid = {
             'estimator__C':        [0.01, 0.1, 1, 10, 100],
             'estimator__max_iter': [2000],
@@ -55,7 +39,7 @@ class Task3:
         ovr = OneVsRestClassifier(
             LogisticRegression(random_state=42, solver='lbfgs')
         )
-        # Use negative hamming loss so GridSearchCV maximises it (minimises HL)
+        # negate hamming loss since GridSearchCV maximizes the scoring function
         neg_hl = make_scorer(hamming_loss, greater_is_better=False)
         gs = GridSearchCV(ovr, param_grid, cv=10, scoring=neg_hl,
                           n_jobs=-1, verbose=0)
@@ -77,13 +61,10 @@ class Task3:
         print("Accuracy\t" + str(acc) + "\tHamming loss\t" + str(hl))
         return
 
-    # ------------------------------------------------------------------ #
-    # Model 2 – One-vs-Rest  Gradient Boosting Classifier
-    # ------------------------------------------------------------------ #
     def model_2_run(self):
         print("--------------------\nModel 2: OneVsRest Gradient Boosting Classifier")
 
-        # Parameters explored during 10-fold CV tuning
+        # tried different tree counts, learning rates, and depths
         param_grid = {
             'estimator__n_estimators':  [100, 200, 300],
             'estimator__learning_rate': [0.05, 0.1, 0.2],
