@@ -1,6 +1,6 @@
 # This is for INFSCI 2440 in Spring 2026.
 # Task 2: Multi-category classification - predict mother's job (Mjob)
-# Models: Random Forest Classifier and SVC
+# Models: Random Forest Classifier (with SMOTE) and SVC
 
 import time
 import sys
@@ -12,6 +12,8 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.svm import SVC
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import classification_report, accuracy_score
+from imblearn.over_sampling import SMOTE
+from imblearn.pipeline import Pipeline as ImbPipeline
 
 from DataLoader import prepare_task2, load_raw_data
 
@@ -62,17 +64,26 @@ class Task2:
             self.print_category_results(cat, p, r, f)
 
     def model_1_run(self):
-        print("Model 1: Random Forest Classifier")
+        print("Model 1: Random Forest Classifier (with SMOTE)")
 
-        # tried different tree counts, depths, and min split sizes
+        # SMOTE synthesises minority-class samples inside each CV fold so the
+        # classifier sees a balanced distribution without leaking test data.
+        # k_neighbors=2 handles the 'health' class which has very few samples.
         param_grid = {
-            'n_estimators':     [100, 200, 300],
-            'max_depth':        [None, 5, 10],
-            'min_samples_split':[2, 5],
+            'clf__n_estimators':     [100, 200, 300],
+            'clf__max_depth':        [None, 5, 10],
+            'clf__min_samples_split':[2, 5],
+            'clf__max_features':     ['sqrt', 'log2'],
+            'clf__min_samples_leaf': [1, 3],
         }
 
+        pipeline = ImbPipeline([
+            ('smote', SMOTE(random_state=42, k_neighbors=2)),
+            ('clf',   RandomForestClassifier(random_state=42)),
+        ])
+
         gs = GridSearchCV(
-            RandomForestClassifier(random_state=42, class_weight='balanced'),
+            pipeline,
             param_grid,
             cv=10,
             scoring='f1_macro',
@@ -96,11 +107,12 @@ class Task2:
     def model_2_run(self):
         print("--------------------\nModel 2: Support Vector Classifier (SVC)")
 
-        # tried different C values, kernels, and gamma settings
+        # broader C range gives finer regularization control;
+        # explicit small gamma values help rbf kernel with many features
         param_grid = {
-            'C':      [0.1, 1, 10, 100],
+            'C':      [0.01, 0.1, 1, 10, 100],
             'kernel': ['rbf', 'linear'],
-            'gamma':  ['scale', 'auto'],
+            'gamma':  ['scale', 'auto', 0.001, 0.01],
         }
 
         gs = GridSearchCV(

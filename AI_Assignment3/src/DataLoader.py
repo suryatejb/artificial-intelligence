@@ -69,6 +69,23 @@ def _add_edu_binary_features(df):
     return df
 
 
+def _add_interaction_features(df):
+    # domain-meaningful pairwise interactions that capture non-linear risk factors
+    if 'Dalc' in df.columns and 'Walc' in df.columns:
+        # combined alcohol load (weekday × weekend)
+        df['Dalc_x_Walc'] = df['Dalc'] * df['Walc']
+    if 'failures' in df.columns and 'studytime' in df.columns:
+        # academic risk: more failures + less study is worse than either alone
+        df['failures_x_studytime'] = df['failures'] * df['studytime']
+    if 'Medu' in df.columns and 'Fedu' in df.columns:
+        # parental education synergy
+        df['Medu_x_Fedu'] = df['Medu'] * df['Fedu']
+    if 'absences' in df.columns and 'failures' in df.columns:
+        # chronic disengagement signal
+        df['absences_x_failures'] = df['absences'] * df['failures']
+    return df
+
+
 def _encode(combined_df, target_col):
     df = combined_df.copy()
 
@@ -85,6 +102,9 @@ def _encode(combined_df, target_col):
     ohe_cols = [c for c in NOMINAL_COLS if c != target_col and c in df.columns]
     if ohe_cols:
         df = pd.get_dummies(df, columns=ohe_cols, drop_first=False, dtype=float)
+
+    # add interaction features before dropping the target
+    df = _add_interaction_features(df)
 
     # drop the target so it's not used as a feature
     if target_col in df.columns:

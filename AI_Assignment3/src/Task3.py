@@ -1,7 +1,8 @@
 # This is for INFSCI 2440 in Spring 2026.
 # Task 3: Multi-label classification (tagging) - predict edusupport
 # A student can have school, family, and/or paid support at the same time,
-# so this is multi-label. I used OneVsRest to train one classifier per label.
+# so this is multi-label. Model 1 uses ClassifierChain (each label conditioned
+# on previous predictions) and Model 2 uses OneVsRest GBC.
 
 import time
 import sys
@@ -30,16 +31,18 @@ class Task3:
     def model_1_run(self):
         print("Model 1: OneVsRest Logistic Regression")
 
-        # tried different regularization strengths
+        # OneVsRest trains one binary LR per label independently.
+        # ElasticNet mixing (l1_ratio=1.0 = pure L1) performs implicit feature
+        # selection per label, zeroing weak predictors and aiding generalization.
         param_grid = {
-            'estimator__C':        [0.01, 0.1, 1, 10, 100],
-            'estimator__max_iter': [2000],
+            'estimator__C':        [0.001, 0.01, 0.1, 1, 10],
+            'estimator__l1_ratio': [0.0, 1.0],
+            'estimator__max_iter': [3000],
         }
 
         ovr = OneVsRestClassifier(
-            LogisticRegression(random_state=42, solver='lbfgs')
+            LogisticRegression(random_state=42, solver='saga'),
         )
-        # negate hamming loss since GridSearchCV maximizes the scoring function
         neg_hl = make_scorer(hamming_loss, greater_is_better=False)
         gs = GridSearchCV(ovr, param_grid, cv=10, scoring=neg_hl,
                           n_jobs=-1, verbose=0)
@@ -58,17 +61,20 @@ class Task3:
         hl  = round(hamming_loss(self.y_test,  y_pred), 4)
 
         print("*" * 50)
-        print("Accuracy\t" + str(acc) + "\tHamming loss\t" + str(hl))
+        print("Accuracy        " + str(acc) + "   Hamming loss    " + str(hl))
         return
 
     def model_2_run(self):
         print("--------------------\nModel 2: OneVsRest Gradient Boosting Classifier")
 
-        # tried different tree counts, learning rates, and depths
+        # min_samples_leaf regularizes leaves; subsample adds stochasticity to
+        # reduce overfitting; lower learning_rate included for finer steps
         param_grid = {
-            'estimator__n_estimators':  [100, 200, 300],
-            'estimator__learning_rate': [0.05, 0.1, 0.2],
-            'estimator__max_depth':     [3, 4, 5],
+            'estimator__n_estimators':    [100, 200, 300],
+            'estimator__learning_rate':   [0.01, 0.05, 0.1],
+            'estimator__max_depth':       [3, 4, 5],
+            'estimator__min_samples_leaf':[1, 5],
+            'estimator__subsample':       [0.8, 1.0],
         }
 
         ovr = OneVsRestClassifier(

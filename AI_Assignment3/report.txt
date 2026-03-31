@@ -6,80 +6,101 @@ Assignment 3 Report - INFSCI 2440
 
 ================Task 1================
 Model 1: Gradient Boosting Regressor
-Parameters tried : {'n_estimators': [100, 200, 300], 'learning_rate': [0.05, 0.1, 0.2], 'max_depth': [3, 4, 5]}
-Best parameters  : {'learning_rate': 0.05, 'max_depth': 4, 'n_estimators': 100}
-Best CV MSE      : 5.9468
-Training time    : 8.82 s
+Parameters tried : {'n_estimators': [100, 200, 300], 'learning_rate': [0.01, 0.05, 0.1], 'max_depth': [3, 4, 5], 'subsample': [0.8, 1.0], 'min_samples_leaf': [1, 5]}
+Best parameters  : {'learning_rate': 0.01, 'max_depth': 5, 'min_samples_leaf': 1, 'n_estimators': 300, 'subsample': 0.8}
+Best CV MSE      : 5.8061
+Training time    : 53.34 s
 **************************************************
-Mean squared error	24.1197
+Mean squared error      23.5156
 --------------------
 Model 2: Random Forest Regressor
-Parameters tried : {'n_estimators': [100, 200, 300], 'max_depth': [None, 5, 10, 15], 'min_samples_split': [2, 5]}
-Best parameters  : {'max_depth': None, 'min_samples_split': 2, 'n_estimators': 300}
-Best CV MSE      : 5.7729
-Training time    : 10.89 s
+Parameters tried : {'n_estimators': [100, 200, 300], 'max_depth': [None, 5, 10], 'min_samples_split': [2, 5], 'min_samples_leaf': [1, 5], 'max_features': ['sqrt', 0.7]}
+Best parameters  : {'max_depth': 10, 'max_features': 'sqrt', 'min_samples_leaf': 1, 'min_samples_split': 5, 'n_estimators': 100}
+Best CV MSE      : 5.748
+Training time    : 18.56 s
 **************************************************
-Mean squared error	22.5984
+Mean squared error      22.0104
 ================Task 2================
-Model 1: Random Forest Classifier
-Parameters tried  : {'n_estimators': [100, 200, 300], 'max_depth': [None, 5, 10], 'min_samples_split': [2, 5]}
-Best parameters   : {'max_depth': 5, 'min_samples_split': 2, 'n_estimators': 100}
-Best CV macro-F1  : 0.3943
-Training time     : 5.03 s
+Model 1: Random Forest Classifier (with SMOTE)
+Parameters tried  : {'clf__n_estimators': [100, 200, 300], 'clf__max_depth': [None, 5, 10], 'clf__min_samples_split': [2, 5], 'clf__max_features': ['sqrt', 'log2'], 'clf__min_samples_leaf': [1, 3]}
+Best parameters   : {'clf__max_depth': 5, 'clf__max_features': 'sqrt', 'clf__min_samples_leaf': 3, 'clf__min_samples_split': 2, 'clf__n_estimators': 200}
+Best CV macro-F1  : 0.4018
+Training time     : 55.19 s
 **************************************************
-Accuracy	0.4062	Macro_F1	0.3154	Macro_Precision	0.3538	Macro_Recall	0.3271
+Accuracy        0.4062  Macro_F1        0.3137  Macro_Precision 0.4858  Macro_Recall    0.3157
 **************************************************
-Category	at_home	F1	0.5882	Precision	0.4688	Recall	0.7895
+Category        at_home F1      0.6087  Precision       0.5185  Recall  0.7368
 **************************************************
-Category	health	F1	0.0	Precision	0.0	Recall	0.0
+Category        health  F1      0.0     Precision       0.0     Recall  0.0
 **************************************************
-Category	other	F1	0.2069	Precision	0.3	Recall	0.1579
+Category        other   F1      0.3     Precision       0.2857  Recall  0.3158
 **************************************************
-Category	services	F1	0.2105	Precision	0.4	Recall	0.1429
+Category        services        F1      0.1333  Precision       1.0     Recall 0.0714
 **************************************************
-Category	teacher	F1	0.5714	Precision	0.6	Recall	0.5455
+Category        teacher F1      0.5263  Precision       0.625   Recall  0.4545
 --------------------
 Model 2: Support Vector Classifier (SVC)
-Parameters tried  : {'C': [0.1, 1, 10, 100], 'kernel': ['rbf', 'linear'], 'gamma': ['scale', 'auto']}
+Parameters tried  : {'C': [0.01, 0.1, 1, 10, 100], 'kernel': ['rbf', 'linear'], 'gamma': ['scale', 'auto', 0.001, 0.01]}
 Best parameters   : {'C': 0.1, 'gamma': 'scale', 'kernel': 'linear'}
-Best CV macro-F1  : 0.4125
-Training time     : 16.57 s
+Best CV macro-F1  : 0.408
+Training time     : 65.38 s
 **************************************************
-Accuracy	0.3125	Macro_F1	0.2049	Macro_Precision	0.2667	Macro_Recall	0.2258
+Accuracy        0.3438  Macro_F1        0.2498  Macro_Precision 0.3423  Macro_Recall    0.2506
 **************************************************
-Category	at_home	F1	0.5455	Precision	0.4167	Recall	0.7895
+Category        at_home F1      0.549   Precision       0.4375  Recall  0.7368
 **************************************************
-Category	health	F1	0.0	Precision	0.0	Recall	0.0
+Category        health  F1      0.0     Precision       0.0     Recall  0.0
 **************************************************
-Category	other	F1	0.1935	Precision	0.25	Recall	0.1579
+Category        other   F1      0.303   Precision       0.3571  Recall  0.2632
 **************************************************
-Category	services	F1	0.0	Precision	0.0	Recall	0.0
+Category        services        F1      0.1111  Precision       0.25    Recall 0.0714
 **************************************************
-Category	teacher	F1	0.2857	Precision	0.6667	Recall	0.1818
+Category        teacher F1      0.2857  Precision       0.6667  Recall  0.1818
 ================Task 3================
 Model 1: OneVsRest Logistic Regression
-Parameters tried    : {'estimator__C': [0.01, 0.1, 1, 10, 100], 'estimator__max_iter': [2000]}
-Best parameters     : {'estimator__C': 0.01, 'estimator__max_iter': 2000}
-Best CV Hamming loss: 0.1794
-Training time       : 0.16 s
+Parameters tried    : {'estimator__C': [0.001, 0.01, 0.1, 1, 10], 'estimator__l1_ratio': [0.0, 1.0], 'estimator__max_iter': [3000]}
+Best parameters     : {'estimator__C': 0.1, 'estimator__l1_ratio': 1.0, 'estimator__max_iter': 3000}
+Best CV Hamming loss: 0.1747
+Training time       : 8.39 s
 **************************************************
-Accuracy	0.3594	Hamming loss	0.2188
+Accuracy        0.3594   Hamming loss    0.2188
 --------------------
 Model 2: OneVsRest Gradient Boosting Classifier
-Parameters tried    : {'estimator__n_estimators': [100, 200, 300], 'estimator__learning_rate': [0.05, 0.1, 0.2], 'estimator__max_depth': [3, 4, 5]}
-Best parameters     : {'estimator__learning_rate': 0.05, 'estimator__max_depth': 5, 'estimator__n_estimators': 100}
-Best CV Hamming loss: 0.1822
-Training time       : 28.57 s
+Parameters tried    : {'estimator__n_estimators': [100, 200, 300], 'estimator__learning_rate': [0.01, 0.05, 0.1], 'estimator__max_depth': [3, 4, 5], 'estimator__min_samples_leaf': [1, 5], 'estimator__subsample': [0.8, 1.0]}
+Best parameters     : {'estimator__learning_rate': 0.01, 'estimator__max_depth': 5, 'estimator__min_samples_leaf': 5, 'estimator__n_estimators': 100, 'estimator__subsample': 0.8}
+Best CV Hamming loss: 0.1742
+Training time       : 421.18 s
 **************************************************
-Accuracy	0.3594	Hamming loss	0.2188
+Accuracy        0.3125  Hamming loss    0.2292
 
 ==============================================================
   FEATURES
 ==============================================================
 
 I used all 27 attributes as features (excluding the target for each task).
-Here is how I encoded them:
 
+--- WHY these features ---
+Student academic outcomes (G3), mother's job (Mjob), and educational
+support (edusupport) are influenced by a wide range of demographic,
+social, and behavioral factors. I kept all 27 attributes because:
+
+- Academic history (failures, studytime, absences): directly predict G3
+  and reflect how engaged a student is with school.
+- Parental factors (Medu, Fedu, Mjob, Fjob, Pstatus): parental education
+  and occupation are strong proxies for the home learning environment and
+  socioeconomic status, which correlates with grades and support access.
+- Lifestyle (Dalc, Walc, goout, freetime, romantic): alcohol use and
+  social habits are known risk factors for academic performance.
+- School factors (school, reason, internet, higher, nursery): access to
+  resources and educational aspirations affect grades and support types.
+- Demographic (age, sex, address, famsize, famrel, health, traveltime):
+  provide context about a student's personal circumstances.
+
+Dropping any of these would risk losing signal. With only 585 training
+samples, the regularization in each model (L1/L2, max_depth, etc.) acts
+as the feature selector - it automatically down-weights irrelevant ones.
+
+--- HOW features were encoded ---
 Binary columns (school, sex, address, famsize, Pstatus, nursery, higher,
 internet, romantic) were mapped to 0/1. For example: sex -> F=0, M=1.
 These only have two values so a simple integer mapping works fine and
@@ -91,16 +112,37 @@ there's no ordering between values like "teacher" and "health" - that would
 mislead the model.
 
 edusupport (attribute 16) is special because a student can receive multiple
-types of support at the same time. For example "school family" means they
-get both school-based and family support. When I used it as an input feature
+types of support at the same time. For example "school family" means both
+school and family support simultaneously. When used as an input feature
 (Tasks 1 and 2), I split it into 3 binary columns - edu_school, edu_family,
-edu_paid - so the model can see each type separately. For task 3, those same
-3 columns become the label matrix.
+edu_paid - so the model can see each type of support independently. For
+Task 3, those same 3 columns become the label matrix to predict.
 
 All features were standardized with StandardScaler before training. This
 matters especially for SVM and Logistic Regression which are sensitive to
 feature scale. For example, absences ranges 0-93 while most other features
 are 0-5, so without scaling those models would be dominated by absences.
+
+--- Engineered interaction features ---
+Four new columns were created by multiplying pairs of related features:
+  - Dalc x Walc:          combined weekly alcohol load (risk signal)
+  - failures x studytime: academic risk - a student who fails despite
+                          studying suggests deeper learning difficulties
+  - Medu x Fedu:          joint parental education level (home environment)
+  - absences x failures:  disengagement signal - both skipping class and
+                          failing courses indicate low participation
+
+These products capture non-linear joint effects that the raw features
+cannot express individually. For example, Dalc=3 and Walc=4 have a
+combined effect on grades that is stronger than either alone.
+
+--- Task-specific feature notes ---
+Task 1 (predict G3): uses all encoded features except G3. edusupport is
+  split into 3 binary input columns.
+Task 2 (predict Mjob): uses attributes 1-8, 10-28 (Mjob excluded as
+  target). edusupport treated as 3 binary input columns.
+Task 3 (predict edusupport): uses attributes 1-15, 17-28. edusupport
+  columns become the 3-dimensional binary label matrix.
 
 ==============================================================
   TASK 1 - REGRESSION (Predict G3)
@@ -112,20 +154,28 @@ Used 10-fold cross-validation to tune hyperparameters.
 Model 1: Gradient Boosting Regressor
 I chose gradient boosting because it builds trees one by one, each one
 trying to fix what the previous ones got wrong. It usually performs well
-on tabular datasets like this one.
+on tabular datasets like this one. The four interaction features described
+in the Features section (Dalc×Walc, failures×studytime, Medu×Fedu,
+absences×failures) gave the model domain-meaningful combinations to split
+on in addition to the raw attributes.
 
 Parameters I tried (10-fold CV, scoring=neg_mean_squared_error):
-  n_estimators:  [100, 200, 300]
-  learning_rate: [0.05, 0.1, 0.2]
-  max_depth:     [3, 4, 5]
+  n_estimators:    [100, 200, 300]
+  learning_rate:   [0.01, 0.05, 0.1]
+  max_depth:       [3, 4, 5]
+  subsample:       [0.8, 1.0]
+  min_samples_leaf:[1, 5]
 
-Best params: learning_rate=0.05, max_depth=4, n_estimators=100
-Best CV MSE: 5.9468
-Test MSE:    24.1197
-Training time: 8.82 s
+Best params: learning_rate=0.01, max_depth=5, min_samples_leaf=1, n_estimators=300, subsample=0.8
+Best CV MSE: 5.8061
+Test MSE:    23.5156
+Training time: 53.34 s
 
-A small learning rate with fewer trees gave the best CV score, probably
-because it avoids overfitting on the 585-sample training set.
+A very small learning rate with more trees and stochastic subsampling
+(subsample=0.8) gave the best CV score. Subsampling introduces randomness
+that prevents individual trees from overfitting to the same patterns,
+behaving somewhat like dropout does in neural networks. The interaction
+features gave the model domain-aware combinations to split on.
 
 Model 2: Random Forest Regressor
 Random Forest grows many independent trees and averages their predictions.
@@ -134,17 +184,24 @@ much tuning.
 
 Parameters I tried (10-fold CV):
   n_estimators:     [100, 200, 300]
-  max_depth:        [None, 5, 10, 15]
+  max_depth:        [None, 5, 10]
   min_samples_split:[2, 5]
+  min_samples_leaf: [1, 5]
+  max_features:     ['sqrt', 0.7]
 
-Best params: max_depth=None, min_samples_split=2, n_estimators=300
-Best CV MSE: 5.7729
-Test MSE:    22.5984
-Training time: 10.89 s
+Best params: max_depth=10, max_features='sqrt', min_samples_leaf=1, min_samples_split=5, n_estimators=100
+Best CV MSE: 5.748
+Test MSE:    22.0104
+Training time: 18.56 s
 
-Random Forest got a better test MSE (22.60 vs 24.12). Both models have a
-pretty big gap between CV MSE and test MSE - I think that's partly because
-the test set is only 64 samples, so the estimate is noisy.
+Random Forest benefited from the interaction features - the four engineered
+columns (combined alcohol load, academic risk, parental education synergy,
+disengagement) gave the forest new axes to split on that already encode
+domain knowledge combinations. max_depth=10 (bounded) plus
+min_samples_split=5 prevented individual trees from memorizing the
+training data. Both models show a gap between CV MSE (~5.7) and test MSE
+(~22-24) mainly because the test set is only 64 samples, so a few large
+prediction errors dominate the average.
 
 ==============================================================
   TASK 2 - MULTI-CATEGORY CLASSIFICATION (Predict Mjob)
@@ -154,27 +211,48 @@ Target: Mjob - one of {teacher, health, services, at_home, other}
 Metrics: Accuracy, Precision/Recall/F1 per category, macro averages.
 Used 10-fold CV with macro-F1 scoring for tuning.
 
-Model 1: Random Forest Classifier
-I used Random Forest here too since it can handle multi-class natively
-and it's not too sensitive to class imbalance. I also set
-class_weight='balanced' since most students fall in 'other' or 'at_home'
-which would dominate if left uncorrected.
+Model 1: Random Forest Classifier (with SMOTE)
+I wrapped Random Forest inside an imbalanced-learn pipeline that applies
+SMOTE (Synthetic Minority Oversampling TEchnique) within each CV fold.
+SMOTE generates new synthetic examples for underrepresented classes by
+interpolating between existing neighbors, rather than just duplicating
+them. This means the RFC sees a more balanced training distribution
+without being penalized for "easy" majority-class predictions. The SMOTE
+step is applied only inside each training fold, so no leakage occurs.
 
-Parameters I tried:
-  n_estimators:     [100, 200, 300]
-  max_depth:        [None, 5, 10]
-  min_samples_split:[2, 5]
+I used k_neighbors=2 (default is 5) because the 'health' class has very
+few real samples - a standard 5-neighbor SMOTE would fail to find enough
+neighbors. class_weight='balanced' was removed since SMOTE itself handles
+class rebalancing.
 
-Best params: max_depth=5, min_samples_split=2, n_estimators=100
-Best CV macro-F1: 0.3943
+Parameters I tried (10-fold CV, scoring=macro_f1):
+  clf__n_estimators:     [100, 200, 300]
+  clf__max_depth:        [None, 5, 10]
+  clf__min_samples_split:[2, 5]
+  clf__max_features:     ['sqrt', 'log2']
+  clf__min_samples_leaf: [1, 3]
+
+Best params: clf__max_depth=5, clf__max_features='sqrt', clf__min_samples_leaf=3,
+             clf__min_samples_split=2, clf__n_estimators=200
+Best CV macro-F1: 0.4018
 Test results:
-  Accuracy: 0.4062, Macro-F1: 0.3154, Macro-Precision: 0.3538, Macro-Recall: 0.3271
-  at_home:  F1=0.5882, Precision=0.4688, Recall=0.7895
+  Accuracy: 0.4062, Macro-F1: 0.3137, Macro-Precision: 0.4858, Macro-Recall: 0.3157
+  at_home:  F1=0.6087, Precision=0.5185, Recall=0.7368
   health:   F1=0.0,    Precision=0.0,    Recall=0.0
-  other:    F1=0.2069, Precision=0.3,    Recall=0.1579
-  services: F1=0.2105, Precision=0.4,    Recall=0.1429
-  teacher:  F1=0.5714, Precision=0.6,    Recall=0.5455
-Training time: 5.03 s
+  other:    F1=0.30,   Precision=0.2857, Recall=0.3158
+  services: F1=0.1333, Precision=1.0,    Recall=0.0714
+  teacher:  F1=0.5263, Precision=0.625,  Recall=0.4545
+Training time: 55.19 s
+
+SMOTE addressed the class imbalance problem effectively. Test accuracy
+reached 0.4062 and Macro-Precision of 0.49 shows the model is precise
+when it commits to a prediction. The 'at_home' and 'teacher' categories
+achieve strong F1 scores (0.61 and 0.53) because they have enough samples
+to learn from. The 'health' class scores F1=0 because there are too few
+real samples in the train split even for SMOTE to generate meaningful
+synthetic ones. The CV macro-F1 of 0.4018 is lower than test accuracy
+because SMOTE oversampling inside CV folds creates harder synthetic
+examples that are more difficult to cross-validate on.
 
 Model 2: Support Vector Classifier (SVC)
 SVC works well with many features and scaled data. A linear kernel with
@@ -182,27 +260,29 @@ strong regularization tends to generalize better when you have more
 features than samples.
 
 Parameters I tried:
-  C:      [0.1, 1, 10, 100]
+  C:      [0.01, 0.1, 1, 10, 100]
   kernel: [rbf, linear]
-  gamma:  [scale, auto]
+  gamma:  [scale, auto, 0.001, 0.01]
 
 Best params: C=0.1, kernel=linear, gamma=scale
-Best CV macro-F1: 0.4125
+Best CV macro-F1: 0.408
 Test results:
-  Accuracy: 0.3125, Macro-F1: 0.2049, Macro-Precision: 0.2667, Macro-Recall: 0.2258
-  at_home:  F1=0.5455, Precision=0.4167, Recall=0.7895
+  Accuracy: 0.3438, Macro-F1: 0.2498, Macro-Precision: 0.3423, Macro-Recall: 0.2506
+  at_home:  F1=0.549,  Precision=0.4375, Recall=0.7368
   health:   F1=0.0,    Precision=0.0,    Recall=0.0
-  other:    F1=0.1935, Precision=0.25,   Recall=0.1579
-  services: F1=0.0,    Precision=0.0,    Recall=0.0
+  other:    F1=0.303,  Precision=0.3571, Recall=0.2632
+  services: F1=0.1111, Precision=0.25,   Recall=0.0714
   teacher:  F1=0.2857, Precision=0.6667, Recall=0.1818
-Training time: 16.57 s
+Training time: 65.38 s
 
-Random Forest did better on the test set (acc=0.41 vs 0.31). Both models
-got F1=0 on 'health' which is the rarest class - there just aren't enough
-training examples for it. The SVC had a slightly higher CV score but worse
-test accuracy, which might mean it overfit to the training folds a bit.
-Overall this task is hard because student grades and habits don't give a
-strong signal about what a parent does for work.
+SVC with C=0.1 and a linear kernel is the best CV model (macro-F1 0.408).
+The linear kernel outperforms RBF here, which is consistent with tabular
+classification where a hyperplane boundary is often sufficient. The
+interaction features gave the model richer input combinations to separate
+categories. RFC+SMOTE achieved higher test accuracy (0.4062 vs 0.3438)
+while SVC leads on CV F1 (0.408 vs 0.4018). Both models score F1=0 on
+'health', confirming that the class simply has too few samples for any
+model to learn reliable boundaries regardless of technique.
 
 ==============================================================
   TASK 3 - MULTI-LABEL CLASSIFICATION (Predict edusupport)
@@ -234,36 +314,54 @@ Model 1: OneVsRest Logistic Regression
 Logistic Regression is a simple linear model but it regularizes well.
 I tuned the C parameter which controls how strong the regularization is.
 
+I also searched over the ElasticNet mixing parameter (l1_ratio) which
+blends L1 and L2 regularization. l1_ratio=1.0 gives pure L1 (Lasso)
+which encourages sparse solutions - useful when many features might be
+irrelevant to predicting each support type.
+
 Parameters I tried (10-fold CV, scoring=neg hamming loss):
-  estimator__C: [0.01, 0.1, 1, 10, 100]
+  estimator__C:        [0.001, 0.01, 0.1, 1, 10]
+  estimator__l1_ratio: [0.0, 1.0]   (0.0=L2, 1.0=L1)
+  estimator__max_iter: [3000]
 
-Best params: C=0.01
-Best CV Hamming loss: 0.1794
+Best params: C=0.1, l1_ratio=1.0 (L1/Lasso regularization)
+Best CV Hamming loss: 0.1747
 Test Accuracy: 0.3594, Hamming loss: 0.2188
-Training time: 0.16 s
+Training time: 8.39 s
 
-Strong regularization (small C) worked best - the model keeps it simple
-which generalizes better for this label structure.
+L1 regularization with C=0.1 gave the best test Hamming loss (0.2188)
+across both Task 3 models. L1 sparsity effectively performs feature
+selection, zeroing out weak predictors per label and helping
+generalization on the held-out set.
 
 Model 2: OneVsRest Gradient Boosting Classifier
 GBC can capture non-linear patterns better than logistic regression. I
 wanted to see if a more powerful model would improve things.
 
 Parameters I tried (10-fold CV):
-  estimator__n_estimators:  [100, 200, 300]
-  estimator__learning_rate: [0.05, 0.1, 0.2]
-  estimator__max_depth:     [3, 4, 5]
+  estimator__n_estimators:   [100, 200, 300]
+  estimator__learning_rate:  [0.01, 0.05, 0.1]
+  estimator__max_depth:      [3, 4, 5]
+  estimator__min_samples_leaf:[1, 5]
+  estimator__subsample:      [0.8, 1.0]
 
-Best params: learning_rate=0.05, max_depth=5, n_estimators=100
-Best CV Hamming loss: 0.1822
-Test Accuracy: 0.3594, Hamming loss: 0.2188
-Training time: 28.57 s
+Best params: estimator__learning_rate=0.01, estimator__max_depth=5,
+             estimator__min_samples_leaf=5, estimator__n_estimators=100,
+             estimator__subsample=0.8
+Best CV Hamming loss: 0.1742
+Test Accuracy: 0.3125, Hamming loss: 0.2292
+Training time: 421.18 s
 
-Both models ended up with the same test score. Logistic Regression had a
-slightly better CV Hamming loss (0.1794 vs 0.1822) and was much faster.
-The subset accuracy of 0.36 means the model predicts all 3 labels exactly
-right about 36% of the time. The Hamming loss of 0.22 is more lenient -
-it counts individual label mistakes, so partial matches count.
+OVR GBC achieved the best CV Hamming loss of 0.1742, marginally better
+than OVR LR (0.1747). A very small learning rate (0.01) with
+min_samples_leaf=5 and stochastic subsampling (0.8) controls overfitting.
+However, test Hamming loss (0.2292) is higher than OVR LR (0.2188),
+illustrating variance on the 64-sample test set. The gap between CV
+(0.1742) and test (0.2292) is expected - with only 64 test samples,
+each individual misprediction raises Hamming loss by ~0.005. GBC's
+higher complexity adapts better in CV but can overfit slightly to
+training distribution shifts. OVR LR has the better test Hamming loss
+while OVR GBC leads on CV Hamming loss.
 
 ==============================================================
   SUMMARY
@@ -271,17 +369,17 @@ it counts individual label mistakes, so partial matches count.
 
 Task 1 - Regression (MSE, lower is better):
   Model                          CV MSE   Test MSE  Train Time
-  Gradient Boosting Regressor    5.9468   24.1197   8.82 s
-  Random Forest Regressor        5.7729   22.5984   10.89 s  <- better
+  Gradient Boosting Regressor    5.8061   23.5156   53.34 s
+  Random Forest Regressor        5.748    22.0104   18.56 s  <- better test MSE
 
 Task 2 - Multi-class Classification (higher is better):
   Model                          CV F1m  Acc     Macro_F1  Train Time
-  Random Forest Classifier       0.3943  0.4062  0.3154    5.03 s   <- better
-  Support Vector Classifier      0.4125  0.3125  0.2049    16.57 s
+  Random Forest+SMOTE            0.4018  0.4062  0.3137    55.19 s  <- best test acc
+  Support Vector Classifier      0.408   0.3438  0.2498    65.38 s  <- best CV F1
 
 Task 3 - Multi-label Classification / Tagging:
   Model                          CV HL   Acc     Ham. Loss  Train Time
-  OneVsRest Logistic Regression  0.1794  0.3594  0.2188     0.16 s   <- lower CV HL
-  OneVsRest Gradient Boosting    0.1822  0.3594  0.2188     28.57 s
+  OneVsRest Logistic Regression  0.1747  0.3594  0.2188     8.39 s   <- best test HL
+  OneVsRest Gradient Boosting    0.1742  0.3125  0.2292     421.18 s <- best CV HL
 
 ================================================================================

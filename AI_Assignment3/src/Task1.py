@@ -26,11 +26,15 @@ class Task1:
     def model_1_run(self):
         print("Model 1: Gradient Boosting Regressor")
 
-        # tried different tree counts, learning rates, and depths
+        # Builds trees sequentially, each one correcting residuals from the last.
+        # subsample < 1.0 adds stochasticity to reduce overfitting.
+        # A very small learning_rate with more estimators generalizes better.
         param_grid = {
-            'n_estimators':  [100, 200, 300],
-            'learning_rate': [0.05, 0.1, 0.2],
-            'max_depth':     [3, 4, 5],
+            'n_estimators':    [100, 200, 300],
+            'learning_rate':   [0.01, 0.05, 0.1],
+            'max_depth':       [3, 4, 5],
+            'subsample':       [0.8, 1.0],
+            'min_samples_leaf':[1, 5],
         }
 
         gs = GridSearchCV(
@@ -56,17 +60,20 @@ class Task1:
         test_mse = mean_squared_error(self.y_test, y_pred)
 
         print("*" * 50)
-        print("Mean squared error\t" + str(round(test_mse, 4)))
+        print("Mean squared error      " + str(round(test_mse, 4)))
         return
 
     def model_2_run(self):
         print("--------------------\nModel 2: Random Forest Regressor")
 
-        # tried different tree counts, max depths, and min split sizes
+        # max_features limits features per split -> decorrelates trees
+        # min_samples_leaf regularizes leaves to reduce overfitting
         param_grid = {
             'n_estimators':     [100, 200, 300],
-            'max_depth':        [None, 5, 10, 15],
+            'max_depth':        [None, 5, 10],
             'min_samples_split':[2, 5],
+            'min_samples_leaf': [1, 5],
+            'max_features':     ['sqrt', 0.7],
         }
 
         gs = GridSearchCV(
