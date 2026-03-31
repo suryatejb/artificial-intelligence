@@ -1,0 +1,300 @@
+﻿
+[co-worker, old] appears in review 	[ 1 ]
+
+[meal, wonderful] appears in review 	[ 1 ]
+
+[bread stick, little] appears in review 	[ 1 ]
+
+[service, excellent] appears in review 	[ 1 ,   2 ]
+
+[place, great] appears in review 	[ 1 ]
+
+[lunch experience, upscale] appears in review 	[ 1 ]
+
+[spots, other] appears in review 	[ 1 ]
+
+[school bar, delicious] appears in review 	[ 2 ]
+
+[school bar, old] appears in review 	[ 2 ]
+
+[woodwork, ornate] appears in review 	[ 2 ]
+
+[tablecloths, white] appears in review 	[ 2 ]
+
+[potatoes, red] appears in review 	[ 2 ]
+
+[meat, tender] appears in review 	[ 2 ]
+
+[meat, flavorful] appears in review 	[ 2 ]
+
+[cole slaw, delicious] appears in review 	[ 2 ]
+
+[cole slaw, picky] appears in review 	[ 2 ]
+
+[atmosphere, nice] appears in review 	[ 3 ]
+
+[draft list, local] appears in review 	[ 3 ]
+
+[draft list, great] appears in review 	[ 3 ]
+
+[potions, huge] appears in review 	[ 3 ]
+
+[menu, huge] appears in review 	[ 3 ]
+
+[thing, good] appears in review 	[ 3 ]
+
+[note, positive] appears in review 	[ 4 ]
+
+[meal, delicious] appears in review 	[ 4 ]
+
+[waffle fries, amazing] appears in review 	[ 4 ]
+
+[choose toppings option, own] appears in review 	[ 4 ]
+
+[ambiance, nice] appears in review 	[ 4 ]
+
+[selection, great] appears in review 	[ 4 ]
+
+[server, rude] appears in review 	[ 4 ]
+
+[checks, separate] appears in review 	[ 4 ]
+
+[thing, small] appears in review 	[ 4 ]
+
+[restaurant, small] appears in review 	[ 4 ,   5 ]
+
+[tables, close] appears in review 	[ 4 ]
+
+[restaurant, close] appears in review 	[ 4 ]
+
+[table, own] appears in review 	[ 4 ]
+
+[uber ride, useless] appears in review 	[ 5 ]
+
+[meals, best] appears in review 	[ 5 ]
+
+[fan, huge] appears in review 	[ 5 ]
+
+[service, great] appears in review 	[ 5 ,   1 4 ]
+
+[drinks, large] appears in review 	[ 5 ]
+
+[service, large] appears in review 	[ 5 ]
+
+[dip sandwiches, french] appears in review 	[ 5 ]
+
+[restaurant, nice] appears in review 	[ 5 ]
+
+[atmosphere, great] appears in review 	[ 5 ]
+
+[food, great] appears in review 	[ 5 ]
+
+[lunch rotation, regular] appears in review 	[ 6 ]
+
+[food, excellent] appears in review 	[ 6 ,   1 3 ]
+
+[turkey devonshire, awesome] appears in review 	[ 6 ]
+
+[$ mini deserts, recent] appears in review 	[ 6 ]
+
+[deal, great] appears in review 	[ 6 ]
+
+[draft beer selection, good] appears in review 	[ 6 ]
+
+[quality, bad] appears in review 	[ 7 ]
+
+[service, rude] appears in review 	[ 7 ]
+
+[day, bad] appears in review 	[ 7 ]
+
+[food, good] appears in review 	[ 8 ]
+
+[food, hearty] appears in review 	[ 8 ]
+
+[prices, decent] appears in review 	[ 8 ]
+
+[service, warm] appears in review 	[ 8 ]
+
+[york, new] appears in review 	[ 8 ]
+
+[good, bad] appears in review 	[ 8 ]
+
+[service, bad] appears in review 	[ 9 ]
+
+[chicken fingers, homemade] appears in review 	[ 1 0 ]
+
+[burgers, good] appears in review 	[ 1 0 ]
+
+[beer, good] appears in review 	[ 1 0 ]
+
+[value, great] appears in review 	[ 1 0 ]
+
+[menu, large] appears in review 	[ 1 1 ]
+
+[portions, larger] appears in review 	[ 1 1 ]
+
+[prices, reasonable] appears in review 	[ 1 1 ]
+
+[menu, reasonable] appears in review 	[ 1 1 ]
+
+[quality, excellent] appears in review 	[ 1 1 ]
+
+[menu, entire] appears in review 	[ 1 1 ]
+
+[specialities, other] appears in review 	[ 1 1 ]
+
+[favorites, top] appears in review 	[ 1 2 ]
+
+[favorites, local] appears in review 	[ 1 2 ]
+
+[feeling, warm] appears in review 	[ 1 2 ]
+
+[wine deal, cheapest] appears in review 	[ 1 2 ]
+
+[portions, generous] appears in review 	[ 1 2 ]
+
+[order, particular] appears in review 	[ 1 2 ]
+
+[course, main] appears in review 	[ 1 2 ]
+
+[onion, french] appears in review 	[ 1 2 ]
+
+[summer, last] appears in review 	[ 1 3 ]
+
+[time, wonderful] appears in review 	[ 1 3 ]
+
+[service, solid] appears in review 	[ 1 3 ]
+
+[group, larger] appears in review 	[ 1 3 ]
+
+[reuben grill, best] appears in review 	[ 1 4 ]
+
+[atmosphere, fun] appears in review 	[ 1 4 ]
+
+[food, fresh] appears in review 	[ 1 4 ,   1 8 ]
+
+[food, interesting] appears in review 	[ 1 4 ]
+
+[waiter, slow] appears in review 	[ 1 5 ]
+
+[time, long] appears in review 	[ 1 5 ]
+
+[thing, second] appears in review 	[ 1 5 ]
+
+[food, cold] appears in review 	[ 1 5 ]
+
+[fries, hard] appears in review 	[ 1 5 ]
+
+[food, hard] appears in review 	[ 1 5 ]
+
+[waiter, kind] appears in review 	[ 1 6 ]
+
+[group, large] appears in review 	[ 1 6 ]
+
+[food, satisfying] appears in review 	[ 1 6 ]
+
+[food, typical] appears in review 	[ 1 6 ]
+
+[food, american] appears in review 	[ 1 6 ]
+
+[way, bad] appears in review 	[ 1 6 ]
+
+[options, vegan] appears in review 	[ 1 6 ]
+
+[salad, large] appears in review 	[ 1 7 ]
+
+[salad, greek] appears in review 	[ 1 7 ]
+
+[nachos, good] appears in review 	[ 1 7 ]
+
+[waffle fries, great] appears in review 	[ 1 7 ]
+
+[waiter, friendly] appears in review 	[ 1 7 ]
+
+[waiter, attentive] appears in review 	[ 1 7 ]
+
+[wines, decent] appears in review 	[ 1 8 ]
+
+[food, fast] appears in review 	[ 1 8 ]
+
+[restaurants, busy] appears in review 	[ 1 9 ]
+
+[hopes, high] appears in review 	[ 1 9 ]
+
+[food, ok] appears in review 	[ 1 9 ]
+
+[food, expensive] appears in review 	[ 1 9 ]
+
+[food, slow] appears in review 	[ 1 9 ]
+
+[food, inferior] appears in review 	[ 1 9 ]
+
+[service, good] appears in review 	[ 2 0 ]
+
+[ambience, pleasant] appears in review 	[ 2 0 ]
+
+[service, pleasant] appears in review 	[ 2 0 ]
+
+[pittsburghers, older] appears in review 	[ 2 0 ]
+
+--------------------------------------------------------------
+
+query opinion [service, good] has similar opinions: 
+
+	[service, excellent] appears in review 	[ 1 ,   2 ]
+
+	[service, great] appears in review 	[ 5 ,   1 4 ]
+
+	[service, warm] appears in review 	[ 8 ]
+
+	[service, solid] appears in review 	[ 1 3 ]
+
+	[waiter, kind] appears in review 	[ 1 6 ]
+
+	[waiter, friendly] appears in review 	[ 1 7 ]
+
+	[service, good] appears in review 	[ 2 0 ]
+
+	[service, pleasant] appears in review 	[ 2 0 ]
+
+query opinion [service, bad] has similar opinions: 
+
+	[server, rude] appears in review 	[ 4 ]
+
+	[service, rude] appears in review 	[ 7 ]
+
+	[service, bad] appears in review 	[ 9 ]
+
+	[waiter, slow] appears in review 	[ 1 5 ]
+
+query opinion [atmosphere, good] has similar opinions: 
+
+	[atmosphere, nice] appears in review 	[ 3 ]
+
+	[ambiance, nice] appears in review 	[ 4 ]
+
+	[atmosphere, great] appears in review 	[ 5 ]
+
+	[atmosphere, fun] appears in review 	[ 1 4 ]
+
+query opinion [food, delicious] has similar opinions: 
+
+	[meat, flavorful] appears in review 	[ 2 ]
+
+	[meal, delicious] appears in review 	[ 4 ]
+
+	[food, great] appears in review 	[ 5 ]
+
+	[food, excellent] appears in review 	[ 6 ,   1 3 ]
+
+	[food, good] appears in review 	[ 8 ]
+
+	[food, hearty] appears in review 	[ 8 ]
+
+	[food, fresh] appears in review 	[ 1 4 ,   1 8 ]
+
+	[food, interesting] appears in review 	[ 1 4 ]
+
+	[food, satisfying] appears in review 	[ 1 6 ]
+
+--------------------------------------------------------------
