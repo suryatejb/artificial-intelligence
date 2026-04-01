@@ -25,6 +25,15 @@ class ExtractOpinions:
         prefix_parts = compounds.get(word_id, [])
         return ' '.join(prefix_parts + [word.text.lower()])
 
+    def _service_reclassify(self, words, adj_id):
+        """If adjective at adj_id has an advcl child with a service-related verb
+        (e.g. 'slow to serve'), return 'service' to override the attribute."""
+        service_verbs = {'serve', 'bring', 'deliver', 'wait'}
+        for w in words:
+            if w.head == adj_id and w.deprel == 'advcl' and w.lemma.lower() in service_verbs:
+                return 'service'
+        return None
+
     def _add_opinion(self, review_id, attribute, value):
         """Add the (attribute, value) pair to extracted_opinions for this review."""
         opinion = attribute + ', ' + value
@@ -87,6 +96,10 @@ class ExtractOpinions:
                         and head_word.upos == 'ADJ'):
                     attribute = self._get_full_noun(words, word.id, compounds)
                     value = head_word.text.lower()
+                    # Rule 1 reclassify: "food was slow to serve" -> [service, slow]
+                    override = self._service_reclassify(words, word.head)
+                    if override:
+                        attribute = override
                     self._add_opinion(review_id, attribute, value)
 
                 # Rule 2 – amod: adjectival modifier, head is a noun
@@ -117,6 +130,10 @@ class ExtractOpinions:
                         noun_id = nsubj_map[word.head]
                         attribute = self._get_full_noun(words, noun_id, compounds)
                         value = word.text.lower()
+                        # Rule 3 reclassify: conjoined adj with service advcl
+                        override = self._service_reclassify(words, word.id)
+                        if override:
+                            attribute = override
                         self._add_opinion(review_id, attribute, value)
 
                 # Rule 4 – conj on amod: adjective conjoined with another adjective that
@@ -130,4 +147,8 @@ class ExtractOpinions:
                     noun_id = amod_map[word.head]
                     attribute = self._get_full_noun(words, noun_id, compounds)
                     value = word.text.lower()
+                    # Rule 4 reclassify: amod conj adj with service advcl
+                    override = self._service_reclassify(words, word.id)
+                    if override:
+                        attribute = override
                     self._add_opinion(review_id, attribute, value)
