@@ -102,14 +102,22 @@ class ExtractOpinions:
                 # Rule 3 – conj: adjective conjoined with another adjective that has a known nsubj
                 # Pattern: "meat was tender and flavorful" -> flavorful -conj-> tender,
                 #           tender has nsubj(meat), so extract [meat, flavorful]
+                # Guard: if the conjoined adj has its OWN explicit nsubj (e.g. "drinks"
+                # in "Service was great and the drinks are large"), skip Rule 3 —
+                # Rule 1 will correctly extract [drinks, large] when iterating over
+                # the nsubj word. This prevents spurious [service, large] extractions.
                 elif (word.deprel == 'conj'
                       and word.upos == 'ADJ'
                       and head_word.upos == 'ADJ'
                       and word.head in nsubj_map):
-                    noun_id = nsubj_map[word.head]
-                    attribute = self._get_full_noun(words, noun_id, compounds)
-                    value = word.text.lower()
-                    self._add_opinion(review_id, attribute, value)
+                    has_own_nsubj = any(
+                        w.head == word.id and w.deprel == 'nsubj' for w in words
+                    )
+                    if not has_own_nsubj:
+                        noun_id = nsubj_map[word.head]
+                        attribute = self._get_full_noun(words, noun_id, compounds)
+                        value = word.text.lower()
+                        self._add_opinion(review_id, attribute, value)
 
                 # Rule 4 – conj on amod: adjective conjoined with another adjective that
                 # is an adjectival modifier (amod) of a noun.

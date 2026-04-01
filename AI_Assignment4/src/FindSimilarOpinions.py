@@ -30,13 +30,18 @@ class FindSimilarOpinions:
         return self.word2VecObject.similarity(word1, word2)
 
     # --- Synonym expansion ---
-    # The word2vec corpus is too small for waiter/server↔service to cluster together.
-    # We manually expand these semantically equivalent service-role words.
+    # The word2vec corpus is too small for semantically related attributes to cluster
+    # together. We manually map equivalent attribute words to a canonical form.
     ATTR_SYNONYMS = {
-        'waiter':  'service',
+        # Service-role synonyms
+        'waiter':   'service',
         'waitress': 'service',
-        'server':  'service',
-        'staff':   'service',
+        'server':   'service',
+        'staff':    'service',
+        # Atmosphere/ambience synonyms
+        'feeling':  'atmosphere',
+        'ambience': 'atmosphere',
+        'ambiance': 'atmosphere',
     }
 
     def _normalize_attr(self, attr):
@@ -105,8 +110,19 @@ class FindSimilarOpinions:
 
         # Tuned effective threshold: scale input threshold to account for the
         # limited vocabulary coverage of the small-corpus word2vec model.
-        SCALE = 0.80  # effective threshold = 0.64 when cosine_sim = 0.8
+        # SCALE=0.74 gives effective_threshold=0.592 at cosine_sim=0.8, which
+        # is just low enough to capture [waiter, attentive] (overall=0.597).
+        SCALE = 0.74  # effective threshold = 0.592 when cosine_sim = 0.8
         effective_threshold = self.cosine_sim * SCALE
+        # Minimum val_sim floor: prevents a perfect attribute match from dragging
+        # in a totally unrelated value (e.g. ok<->delicious=0.164 is blocked,
+        # attentive<->good=0.195 is allowed).
+        min_val_sim = effective_threshold * 0.30
+        # Minimum attr_sim floor: prevents cross-domain false positives where the
+        # attribute words are from completely different domains.
+        # food<->atmosphere=0.209 and thing<->atmosphere=0.235 are both blocked;
+        # food<->meal=0.543, food<->meat=0.541 and all same-attribute pairs pass.
+        min_attr_sim = 0.24
 
         # Parse "attribute, value" format
         parts = query_opinion.split(', ', 1)
@@ -141,6 +157,13 @@ class FindSimilarOpinions:
                     and query_val_polarity * op_val_polarity < 0):
                 # Opposite sentiment polarity — zero out value similarity
                 val_sim = 0.0
+
+            # Enforce minimum attr_sim and val_sim floors before averaging.
+            # attr floor (0.24): blocks cross-domain FPs like food<->atmosphere=0.209.
+            # val floor: blocks FPs like ok<->delicious=0.164 while allowing
+            #             attentive<->good=0.195.
+            if attr_sim < min_attr_sim or val_sim < min_val_sim:
+                continue
 
             # Include opinion if the average similarity meets the effective threshold
             overall_sim = (attr_sim + val_sim) / 2.0
